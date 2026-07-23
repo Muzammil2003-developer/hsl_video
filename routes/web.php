@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LiveStreamController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VideoUploadController;
@@ -17,7 +18,11 @@ Route::get('/dashboard', function () {
     $readyCount = auth()->user()->videos()->where('status', 'ready')->count();
     $processingCount = auth()->user()->videos()->where('status', 'processing')->count();
     $totalSize = auth()->user()->videos()->sum('file_size');
-    return view('dashboard', compact('videosCount', 'readyCount', 'processingCount', 'totalSize'));
+
+    $liveStreamsCount = auth()->user()->liveStreams()->count();
+    $currentlyLive = auth()->user()->liveStreams()->where('status', 'live')->count();
+
+    return view('dashboard', compact('videosCount', 'readyCount', 'processingCount', 'totalSize', 'liveStreamsCount', 'currentlyLive'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -44,6 +49,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/videos/{video}/stream/{path}', [VideoController::class, 'stream'])
         ->where('path', '.*')
         ->name('video.stream');
+
+    // Live Stream management
+    Route::get('/live', [LiveStreamController::class, 'index'])->name('live.index');
+    Route::get('/live/create', [LiveStreamController::class, 'create'])->name('live.create');
+    Route::post('/live', [LiveStreamController::class, 'store'])->name('live.store');
+    Route::get('/live/{liveStream}', [LiveStreamController::class, 'show'])->name('live.show');
+    Route::get('/live/{liveStream}/edit', [LiveStreamController::class, 'edit'])->name('live.edit');
+    Route::put('/live/{liveStream}', [LiveStreamController::class, 'update'])->name('live.update');
+    Route::delete('/live/{liveStream}', [LiveStreamController::class, 'destroy'])->name('live.destroy');
+
+    // Live Stream actions
+    Route::get('/live/{liveStream}/obs-config', [LiveStreamController::class, 'obsConfig'])->name('live.obs-config');
+    Route::post('/live/{liveStream}/start', [LiveStreamController::class, 'start'])->name('live.start');
+    Route::post('/live/{liveStream}/stop', [LiveStreamController::class, 'stop'])->name('live.stop');
+    Route::get('/live/{liveStream}/check-status', [LiveStreamController::class, 'checkStatus'])->name('live.check-status');
 });
+
+// Streaming server webhook (no auth - authenticated via webhook secret)
+Route::post('/streaming/webhook', [LiveStreamController::class, 'webhook'])->name('streaming.webhook');
 
 require __DIR__.'/auth.php';

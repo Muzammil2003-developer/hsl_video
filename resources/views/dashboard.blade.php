@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Stats Grid -->
+            <!-- Video Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                     <div class="p-6">
@@ -24,7 +24,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                     <div class="p-6">
                         <div class="flex items-center">
@@ -40,7 +39,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                     <div class="p-6">
                         <div class="flex items-center">
@@ -56,7 +54,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                     <div class="p-6">
                         <div class="flex items-center">
@@ -76,6 +73,41 @@
                                     @endphp
                                     {{ round($bytes, 1) }} {{ $units[$i] }}
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Streaming Stats Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">Live Streams</p>
+                                <p class="text-2xl font-semibold text-gray-900">{{ $liveStreamsCount ?? 0 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-red-500 rounded-md p-3 relative">
+                                <span class="animate-ping absolute h-6 w-6 rounded-full bg-red-300 opacity-75"></span>
+                                <svg class="h-6 w-6 text-white relative" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">Currently Live</p>
+                                <p class="text-2xl font-semibold text-gray-900">{{ $currentlyLive ?? 0 }}</p>
                             </div>
                         </div>
                     </div>
@@ -106,10 +138,18 @@
                                     <p class="text-sm text-gray-500">View and manage your video library</p>
                                 </div>
                             </a>
+                            <a href="{{ route('live.create') }}" class="flex items-center p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                                <svg class="h-8 w-8 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-gray-900">Create Live Stream</p>
+                                    <p class="text-sm text-gray-500">Start broadcasting with OBS Studio</p>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
-
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Platform Information</h3>
@@ -126,9 +166,13 @@
                                 <span class="text-gray-500">Database</span>
                                 <span class="font-medium">{{ config('database.default') }}</span>
                             </div>
-                            <div class="flex justify-between py-2">
+                            <div class="flex justify-between py-2 border-b border-gray-100">
                                 <span class="text-gray-500">Queue Driver</span>
                                 <span class="font-medium">{{ config('queue.default') }}</span>
+                            </div>
+                            <div class="flex justify-between py-2">
+                                <span class="text-gray-500">FFmpeg</span>
+                                <span class="font-medium">{{ extension_loaded('exec') ? 'Available' : 'Check system' }}</span>
                             </div>
                         </div>
                     </div>

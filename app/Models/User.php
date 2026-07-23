@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Video::class);
     }
+
+    public function liveStreams()
+    {
+        return $this->hasMany(LiveStream::class);
+    }
 }

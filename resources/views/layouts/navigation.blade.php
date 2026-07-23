@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('videos.create')" :active="request()->routeIs('videos.create')">
                         {{ __('Upload') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('live.index')" :active="request()->routeIs('live.*')">
+                        {{ __('Live') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -81,6 +84,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('videos.create')" :active="request()->routeIs('videos.create')">
                 {{ __('Upload') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('live.index')" :active="request()->routeIs('live.*')">
+                {{ __('Live') }}
             </x-responsive-nav-link>
         </div>
 
