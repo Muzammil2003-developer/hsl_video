@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $videos = Video::forUser(auth()->user())
